@@ -29,6 +29,7 @@ mod postgresql;
 mod redshift;
 mod snowflake;
 mod sqlite;
+mod trino;
 
 use core::any::{Any, TypeId};
 use core::fmt::Debug;
@@ -51,6 +52,7 @@ pub use self::postgresql::PostgreSqlDialect;
 pub use self::redshift::RedshiftSqlDialect;
 pub use self::snowflake::SnowflakeDialect;
 pub use self::sqlite::SQLiteDialect;
+pub use self::trino::TrinoDialect;
 
 /// Macro for streamlining the creation of derived `Dialect` objects.
 /// The generated struct includes `new()` and `default()` constructors.
@@ -1685,6 +1687,7 @@ pub fn dialect_from_str(dialect_name: impl AsRef<str>) -> Option<Box<dyn Dialect
         "postgresql" | "postgres" => Some(Box::new(PostgreSqlDialect {})),
         "hive" => Some(Box::new(HiveDialect {})),
         "sqlite" => Some(Box::new(SQLiteDialect {})),
+        "trino" => Some(Box::new(TrinoDialect {})),
         "snowflake" => Some(Box::new(SnowflakeDialect)),
         "redshift" => Some(Box::new(RedshiftSqlDialect {})),
         "mssql" => Some(Box::new(MsSqlDialect {})),
@@ -1734,6 +1737,7 @@ mod tests {
         assert!(parse_dialect("postgres").is::<PostgreSqlDialect>());
         assert!(parse_dialect("hive").is::<HiveDialect>());
         assert!(parse_dialect("sqlite").is::<SQLiteDialect>());
+        assert!(parse_dialect("trino").is::<TrinoDialect>());
         assert!(parse_dialect("snowflake").is::<SnowflakeDialect>());
         assert!(parse_dialect("SnowFlake").is::<SnowflakeDialect>());
         assert!(parse_dialect("MsSql").is::<MsSqlDialect>());
